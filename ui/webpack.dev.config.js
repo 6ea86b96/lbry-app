@@ -1,4 +1,5 @@
 const path = require('path');
+const appPath = path.resolve(__dirname, 'js')
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
@@ -16,6 +17,10 @@ module.exports = {
   debug: true,
   cache: true,
   devtool: 'eval',
+  resolve: {
+    root: appPath,
+    extensions: ['', '.js', '.jsx', '.css'],
+  },
   module: {
     preLoaders: [
       {
