@@ -35,7 +35,7 @@ export const selectPageTitle = createSelector(
     switch(page)
     {
       case 'discover':
-        return 'Discover'
+        return 'Home'
       case 'wallet':
       case 'send':
       case 'receive':
