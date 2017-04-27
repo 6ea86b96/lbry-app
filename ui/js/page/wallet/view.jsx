@@ -11,6 +11,7 @@ import {
   BusyMessage,
   CreditAmount
 } from 'component/common';
+import SubHeader from 'component/subHeader'
 
 class AddressSection extends React.Component {
   componentWillMount() {
@@ -247,6 +248,7 @@ const WalletPage = (props) => {
 
   return (
     <main className="page">
+      <SubHeader modifier="constrained" />
       <section className="card">
         <div className="card__title-primary">
           <h3>Balance</h3>

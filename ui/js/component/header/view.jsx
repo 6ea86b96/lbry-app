@@ -3,10 +3,12 @@ import {
   Icon,
   CreditAmount,
 } from 'component/common.js';
+import lbry from 'lbry'
 import Link from 'component/link';
 
 var Header = React.createClass({
   _balanceSubscribeId: null,
+  _isMounted: false,
 
   getInitialState: function() {
     return {
@@ -14,44 +16,43 @@ var Header = React.createClass({
     };
   },
   componentDidMount: function() {
+    this._isMounted = true;
     this._balanceSubscribeId = lbry.balanceSubscribe((balance) => {
-      this.setState({ balance: balance });
+      if (this._isMounted) {
+        this.setState({balance: balance});
+      }
     });
   },
   componentWillUnmount: function() {
+    this._isMounted = false;
     if (this._balanceSubscribeId) {
       lbry.balanceUnsubscribe(this._balanceSubscribeId)
     }
   },
   render: function() {
-    return <div>
-      <header id="header">
+    return <header id="header">
         <div className="header__item">
           <Link onClick={() => { history.back() }} button="alt button--flat" icon="icon-arrow-left" />
         </div>
         <div className="header__item">
-          <Link href="?discover" button="alt button--flat" icon="icon-home" />
+          <Link href="#" onClick={() => this.props.navigate('discover')} button="alt button--flat" icon="icon-home" />
         </div>
         <div className="header__item header__item--wunderbar">
           <WunderBar address={this.props.address} icon={this.props.wunderBarIcon} onSearch={this.props.onSearch} />
         </div>
         <div className="header__item">
-          <Link href="?wallet" button="text" icon="icon-bank" label={lbry.formatCredits(this.state.balance, 1)} ></Link>
+          <Link href="#" onClick={() => this.props.navigate('wallet')} button="text" icon="icon-bank" label={lbry.formatCredits(this.state.balance, 1)} ></Link>
         </div>
         <div className="header__item">
-          <Link button="primary button--flat" href="?publish" icon="icon-upload" label="Publish" />
+          <Link button="primary button--flat" href="#" onClick={() => this.props.navigate('publish')} icon="icon-upload" label="Publish" />
         </div>
         <div className="header__item">
-          <Link button="alt button--flat" href="?downloaded" icon="icon-folder" />
+          <Link button="alt button--flat" href="#"  onClick={() => this.props.navigate('downloaded')} icon="icon-folder" />
         </div>
         <div className="header__item">
-          <Link button="alt button--flat" href="?settings" icon="icon-gear" />
+          <Link button="alt button--flat" href="#"  onClick={() => this.props.navigate('settings')} icon="icon-gear" />
         </div>
       </header>
-      {this.props.links ?
-       <SubHeader links={this.props.links} viewingPage={this.props.viewingPage} /> :
-       ''}
-    </div>
   }
 });
 
@@ -96,7 +97,8 @@ let WunderBar = React.createClass({
   onFocus: function() {
     this._stateBeforeSearch = this.state;
     let newState = {
-      icon: "icon-search"
+      icon: "icon-search",
+      isActive: true
     }
     // this._input.value = ""; //trigger placeholder
     this._focusPending = true;
@@ -107,7 +109,7 @@ let WunderBar = React.createClass({
     this.setState(newState);
   },
   onBlur: function() {
-    this.setState(this._stateBeforeSearch);
+    this.setState(Object.assign({}, this._stateBeforeSearch, { isActive: false }));
     this._input.value = this.state.address;
   },
   componentDidUpdate: function() {
@@ -121,41 +123,18 @@ let WunderBar = React.createClass({
     this._input = ref;
   },
   render: function() {
-    return <div className="wunderbar">
+    return <div className={"wunderbar" + (this.state.isActive ? " wunderbar--active" : "")}>
       {this.state.icon ? <Icon fixed icon={this.state.icon} /> : '' }
-      <input className="wunderbar__input" type="search" placeholder="Type a LBRY address or search term"
-             ref={this.onReceiveRef}
-             onFocus={() => this.props.activateSearch()}
-             onBlur={() => this.props.deactivateSearch()}
-             onChange={this.onChange}
-             value={ this.state.address }
-             placeholder="Find movies, music, games, and more" />
+      <input className="wunderbar__input" type="search"
+         ref={this.onReceiveRef}
+         onFocus={() => this.props.activateSearch()}
+         onBlur={() => this.props.deactivateSearch()}
+         onChange={this.onChange}
+         value={ this.state.address }
+         placeholder="Find movies, music, games, and more"
+       />
       </div>
   }
 })
-
-const SubHeader = (props) => {
-  const {
-    subLinks,
-    currentPage,
-    navigate,
-  } = props
-
-  const links = []
-
-  for(let link of Object.keys(subLinks)) {
-    links.push(
-      <a href="#" onClick={() => navigate(link)} key={link} className={link == currentPage ? 'sub-header-selected' : 'sub-header-unselected' }>
-        {subLinks[link]}
-      </a>
-    )
-  }
-
-  return (
-    <nav className="sub-header">
-      {links}
-    </nav>
-  )
-}
 
 export default Header;

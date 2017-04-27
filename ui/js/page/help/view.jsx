@@ -4,6 +4,7 @@ import React from 'react';
 import lbry from 'lbry.js';
 import Link from 'component/link';
 import {version as uiVersion} from 'json!../../../package.json';
+import SubHeader from 'component/subHeader'
 
 var HelpPage = React.createClass({
   getInitialState: function() {
@@ -49,7 +50,8 @@ var HelpPage = React.createClass({
     }
 
     return (
-      <main className="page">
+      <main className="constrained-page">
+        <SubHeader modifier="constrained" />
         <section className="card">
           <h3>Read the FAQ</h3>
           <p>Our FAQ answers many common questions.</p>

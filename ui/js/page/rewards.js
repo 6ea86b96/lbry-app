@@ -5,6 +5,7 @@ import {CreditAmount, Icon} from 'component/common.js';
 import rewards from 'rewards';
 import Modal from 'component/modal';
 import {RewardLink} from 'component/reward-link';
+import SubHeader from 'component/subHeader'
 
 const RewardTile = React.createClass({
   propTypes: {
@@ -56,14 +57,15 @@ var RewardsPage = React.createClass({
   },
   render: function() {
     return (
-      <main>
-        <form onSubmit={this.handleSubmit}>
+      <main className="constrained-page">
+        <SubHeader />
+        <div>
           {!this.state.userRewards
             ? (this.state.failed ? <div className="empty">Failed to load rewards.</div> : '')
             : this.state.userRewards.map(({RewardType, RewardTitle, RewardDescription, TransactionID, RewardAmount}) => {
               return <RewardTile key={RewardType} onRewardClaim={this.loadRewards} type={RewardType} title={RewardTitle} description={RewardDescription} claimed={!!TransactionID} value={RewardAmount} />;
             })}
-        </form>
+        </div>
       </main>
     );
   }

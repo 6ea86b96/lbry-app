@@ -1,8 +1,9 @@
 import React from 'react';
 import {FormField, FormRow} from '../component/form.js';
 import lbry from '../lbry.js';
+import SubHeader from 'component/subHeader'
 
-var SettingsPage = React.createClass({
+const SettingsPage = React.createClass({
   _onSettingSaveSuccess: function() {
     // This is bad.
     // document.dispatchEvent(new CustomEvent('globalNotice', {
@@ -92,7 +93,8 @@ var SettingsPage = React.createClass({
  </section>
  */
     return (
-      <main>
+      <main className="constrained-page">
+        <SubHeader modifier="constrained" />
         <section className="card">
           <div className="card__content">
             <h3>Download Directory</h3>
