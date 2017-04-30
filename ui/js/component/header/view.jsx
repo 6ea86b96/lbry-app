@@ -102,9 +102,9 @@ let WunderBar = React.createClass({
     }
     // this._input.value = ""; //trigger placeholder
     this._focusPending = true;
-    if (!this.state.address.match(/^lbry:\/\//)) //onFocus, if they are not on an exact URL, clear the bar
+    if (!this.state.address.startsWith('lbry://')) //onFocus, if they are not on an exact URL, clear the bar
     {
-      newState.address = "";
+      newState.address = '';
     }
     this.setState(newState);
   },
@@ -123,17 +123,18 @@ let WunderBar = React.createClass({
     this._input = ref;
   },
   render: function() {
-    return <div className={"wunderbar" + (this.state.isActive ? " wunderbar--active" : "")}>
-      {this.state.icon ? <Icon fixed icon={this.state.icon} /> : '' }
-      <input className="wunderbar__input" type="search"
-         ref={this.onReceiveRef}
-         onFocus={() => this.props.activateSearch()}
-         onBlur={() => this.props.deactivateSearch()}
-         onChange={this.onChange}
-         value={ this.state.address }
-         placeholder="Find movies, music, games, and more"
-       />
+    return (
+      <div className={'wunderbar' + (this.state.isActive ? ' wunderbar--active' : '')}>
+        {this.state.icon ? <Icon fixed icon={this.state.icon} /> : '' }
+        <input className="wunderbar__input" type="search"
+               ref={this.onReceiveRef}
+               onFocus={this.props.activateSearch()}
+               onBlur={this.deactivateSearch()}
+               onChange={this.onChange}
+               value={this.state.address}
+               placeholder="Find movies, music, games, and more" />
       </div>
+    );
   }
 })
 
