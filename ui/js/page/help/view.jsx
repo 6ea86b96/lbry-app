@@ -50,7 +50,7 @@ var HelpPage = React.createClass({
     }
 
     return (
-      <main className="constrained-page">
+      <main className="main--single-column">
         <SubHeader modifier="constrained" />
         <section className="card">
           <h3>Read the FAQ</h3>

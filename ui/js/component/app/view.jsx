@@ -1,6 +1,5 @@
 import React from 'react'
 import Router from 'component/router'
-import Drawer from 'component/drawer';
 import Header from 'component/header';
 import ErrorModal from 'component/errorModal'
 import DownloadingModal from 'component/downloadingModal'
@@ -20,8 +19,6 @@ const App = React.createClass({
   render: function() {
     const {
       currentPage,
-      openDrawer,
-      closeDrawer,
       modal,
       drawerOpen,
       headerLinks,

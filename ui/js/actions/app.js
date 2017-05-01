@@ -26,22 +26,11 @@ export function doNavigate(path) {
     const state = getState()
     const pageTitle = selectPageTitle(state)
     window.document.title = pageTitle
+    history.pushState('', null, path)
   }
 }
 
 export function doLogoClick() {
-}
-
-export function doOpenDrawer() {
-  return {
-    type: types.OPEN_DRAWER
-  }
-}
-
-export function doCloseDrawer() {
-  return {
-    type: types.CLOSE_DRAWER
-  }
 }
 
 export function doOpenModal(modal) {

@@ -89,7 +89,7 @@ const ShowPage = (props) => {
   const uriLookupComplete = !!claim && Object.keys(claim).length
 
   return (
-    <main className="constrained-page">
+    <main className="main--single-column">
       <section className="show-page-media">
         { contentType && contentType.startsWith('video/') ?
             <Video className="video-embedded" uri={uri} metadata={metadata} outpoint={outpoint} /> :

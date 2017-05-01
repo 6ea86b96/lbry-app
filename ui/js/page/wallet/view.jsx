@@ -247,7 +247,7 @@ const WalletPage = (props) => {
   } = props
 
   return (
-    <main className="page">
+    <main className="main--single-column">
       <SubHeader modifier="constrained" />
       <section className="card">
         <div className="card__title-primary">

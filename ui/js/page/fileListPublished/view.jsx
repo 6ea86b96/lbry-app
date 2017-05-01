@@ -46,7 +46,7 @@ class FileListPublished extends React.Component {
     }
 
     return (
-      <main className="constrained-page">
+      <main className="main--single-column">
         <SubHeader modifier="constrained" />
         {content}
       </main>
