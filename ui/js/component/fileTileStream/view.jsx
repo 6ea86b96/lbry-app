@@ -2,7 +2,6 @@ import React from 'react';
 import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
-import FileActions from 'component/fileActions';
 import {Thumbnail, TruncatedText,} from 'component/common.js';
 import FilePrice from 'component/filePrice'
 import UriIndicator from 'component/uriIndicator';

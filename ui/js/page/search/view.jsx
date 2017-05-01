@@ -70,18 +70,29 @@ const SearchResults = (props) => {
 
 const SearchPage = (props) => {
   const isValidUri = (query) => true
+  const {
+    query,
+  } = props
 
   return (
-    <main>
-      { isValidUri(this.props.query) ?
-        <div>
-          <h3>lbry://{this.props.query}</h3>
-          <div><BusyMessage message="Resolving the URL" /></div>
-        </div> : '' }
-      <h3>Search</h3>
-      <SearchResults query={this.props.query} />
+    <main className="main--single-column">
+      { isValidUri(query) ?
+        <section className="section-spaced">
+          <h3 className="card-row__header">
+            Exact URL
+            <ToolTip label="?" body="This is the resolution of a LBRY URL and not controlled by LBRY Inc." className="tooltip--header" />
+          </h3>
+          <FileTile uri={query} showEmpty={true} />
+        </section> : '' }
+      <section className="section-spaced">
+        <h3 className="card-row__header">
+          Search Results for {query}
+          <ToolTip label="?" body="These search results are provided by LBRY, Inc." className="tooltip--header" />
+        </h3>
+        <SearchResults query={query} />
+      </section>
     </main>
-  );
+  )
 }
 
 export default SearchPage

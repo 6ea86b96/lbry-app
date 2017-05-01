@@ -55,6 +55,7 @@ const FormatItem = (props) => {
 const ShowPage = (props) => {
   const {
     claim,
+    navigate,
     claim: {
       txid,
       nout,
@@ -87,6 +88,25 @@ const ShowPage = (props) => {
 
   const outpoint = txid + ':' + nout;
   const uriLookupComplete = !!claim && Object.keys(claim).length
+
+  if (props.isFailed) {
+    return (
+      <main className="main--single-column">
+        <section className="card">
+          <div className="card__inner">
+            <div className="card__title-identity"><h1>{uri}</h1></div>
+          </div>
+          <div className="card__content">
+            <p>
+              This location is not yet in use.
+              { ' ' }
+              <Link href="#" onClick={() => navigate('publish')} label="Put something here" />.
+            </p>
+          </div>
+        </section>
+      </main>
+    )
+  }
 
   return (
     <main className="main--single-column">

@@ -12,6 +12,7 @@ class FileTile extends React.Component {
       displayStyle,
       uri,
       claim,
+      showEmpty,
     } = this.props
 
     if(!claim) {
@@ -19,6 +20,10 @@ class FileTile extends React.Component {
         return <FileCardStream uri={uri} />
       }
       return null
+    }
+
+    if (showEmpty) {
+      return <div className="empty">Empty file tile for {uri}</div>
     }
 
     return displayStyle == 'card' ?
