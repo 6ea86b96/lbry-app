@@ -20,12 +20,8 @@ const App = React.createClass({
     const {
       currentPage,
       modal,
-      drawerOpen,
       headerLinks,
-      search,
-      searchTerm,
     } = this.props
-    const searchQuery = (currentPage == 'discover' && searchTerm ? searchTerm : '')
 
     return (
       <div id="window">
