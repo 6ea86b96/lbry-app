@@ -38,13 +38,13 @@ var Header = React.createClass({
           <Link href="#" onClick={() => this.props.navigate('discover')} button="alt button--flat" icon="icon-home" />
         </div>
         <div className="header__item header__item--wunderbar">
-          <WunderBar address={this.props.address} icon={this.props.wunderBarIcon} onSearch={this.props.onSearch} viewingPage={this.props.viewingPage} />
+          <WunderBar address={this.props.address} icon={this.props.wunderBarIcon} onSearch={this.props.onSearch} />
         </div>
         <div className="header__item">
           <Link href="#" onClick={() => this.props.navigate('wallet')} button="text" icon="icon-bank" label={lbry.formatCredits(this.state.balance, 1)} ></Link>
         </div>
         <div className="header__item">
-          <Link button="primary button--flat" href="#" onClick={() => this.props.navigate('publish')} icon="icon-upload" label="Publish" />
+          <Link button="primary button--flat" href="#" onClick={() => this.props.navigate('publish')} icon="icon-upload" />
         </div>
         <div className="header__item">
           <Link button="alt button--flat" href="#"  onClick={() => this.props.navigate('downloaded')} icon="icon-folder" />
@@ -90,7 +90,7 @@ let WunderBar = React.createClass({
 
   },
   componentWillReceiveProps(nextProps) {
-    if (nextProps.viewingPage !== this.props.viewingPage) {
+    if (nextProps.address !== this.state.address || nextProps.icon !== this.state.icon) {
       this.setState({ address: nextProps.address, icon: nextProps.icon });
     }
   },
@@ -128,8 +128,8 @@ let WunderBar = React.createClass({
         {this.state.icon ? <Icon fixed icon={this.state.icon} /> : '' }
         <input className="wunderbar__input" type="search"
                ref={this.onReceiveRef}
-               onFocus={this.props.activateSearch()}
-               onBlur={this.deactivateSearch()}
+               onFocus={() => this.props.activateSearch()}
+               onBlur={() => this.props.deactivateSearch()}
                onChange={this.onChange}
                value={this.state.address}
                placeholder="Find movies, music, games, and more" />
