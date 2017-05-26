@@ -6,7 +6,7 @@ import lighthouse from './lighthouse.js';
 import App from 'component/app/index.js';
 import SplashScreen from 'component/splash.js';
 import SnackBar from 'component/snackBar';
-import {AuthOverlay} from 'component/auth.js';
+import AuthOverlay from 'component/auth';
 import { Provider } from 'react-redux';
 import store from 'store.js';
 import {
@@ -23,6 +23,9 @@ import {
 import {
   toQueryString,
 } from 'util/query_params'
+import {
+  doFetchRewards,
+} from 'actions/rewards'
 
 const {remote, ipcRenderer, shell} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
@@ -78,10 +81,13 @@ var init = function() {
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
     const actions = []
 
-    app.store.dispatch(doDaemonReady())
-    app.store.dispatch(doChangePath('/discover'))
-    app.store.dispatch(doFetchDaemonSettings())
-    app.store.dispatch(doFileList())
+    const dispatch = app.store.dispatch
+
+    dispatch(doDaemonReady())
+    dispatch(doChangePath('/discover'))
+    dispatch(doFetchDaemonSettings())
+    dispatch(doFileList())
+    dispatch(doFetchRewards())
 
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }

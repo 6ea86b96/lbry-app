@@ -9,7 +9,7 @@ import PublishPage from 'page/publish';
 import DiscoverPage from 'page/discover';
 import SplashScreen from 'component/splash.js';
 import DeveloperPage from 'page/developer.js';
-import RewardsPage from 'page/rewards.js';
+import RewardsPage from 'page/rewards';
 import FileListDownloaded from 'page/fileListDownloaded'
 import FileListPublished from 'page/fileListPublished'
 import ChannelPage from 'page/channel'
@@ -20,7 +20,6 @@ const route = (page, routesMap) => {
 
   return component
 };
-
 
 const Router = (props) => {
   const {

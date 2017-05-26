@@ -1,14 +1,14 @@
 import React from "react";
-import lbry from "../lbry.js";
-import lbryio from "../lbryio.js";
-import Modal from "./modal.js";
-import ModalPage from "./modal-page.js";
+import lbry from "lbry";
+import lbryio from "lbryio";
+import Modal from "component/modal";
+import ModalPage from "component/modal-page";
 import Link from "component/link"
-import {RewardLink} from 'component/reward-link';
-import {FormRow} from "../component/form.js";
-import {CreditAmount, Address} from "../component/common.js";
-import {getLocal, setLocal} from '../utils.js';
-import rewards from '../rewards'
+import RewardLink from 'component/rewardLink';
+import {FormRow} from "component/form";
+import {CreditAmount, Address} from "component/common";
+import {getLocal, setLocal} from 'utils';
+import rewards from 'rewards'
 
 
 class SubmitEmailStage extends React.Component {
@@ -135,7 +135,7 @@ class WelcomeStage extends React.Component {
     super(props);
 
     this.state = {
-      hasReward: false,
+      hasReward: true,
       rewardAmount: null,
     };
   }
@@ -148,8 +148,19 @@ class WelcomeStage extends React.Component {
   }
 
   render() {
+    const {
+      claimedRewardsByType,
+      fetchingRewards,
+      newUserReward,
+    } = this.props
+
+    const hasReward = claimedRewardsByType.length > 0
+
+    if (fetchingRewards) return null
+    if (!newUserReward) return null
+
     return (
-      !this.state.hasReward ?
+      !hasReward ?
         <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY" {...this.props}>
           <section>
             <h3 className="modal__header">Welcome to LBRY.</h3>
@@ -158,14 +169,13 @@ class WelcomeStage extends React.Component {
             <p>Below, LBRY is controlled by users -- you -- via blockchain and decentralization.</p>
             <p>Thank you for making content freedom possible! Here's a nickel, kid.</p>
             <div style={{textAlign: "center", marginBottom: "12px"}}>
-              <RewardLink type="new_user" button="primary" onRewardClaim={(event) => { this.onRewardClaim(event) }} onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
+              <RewardLink reward={newUserReward} button="primary" onRewardClaim={(event) => { this.onRewardClaim(event) }} onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
             </div>
           </section>
          </Modal> :
          <Modal type="alert" overlayClassName="modal-overlay modal-overlay--clear" isOpen={true} contentLabel="Welcome to LBRY" {...this.props} onConfirmed={() => { this.props.setStage(null) }}>
           <section>
             <h3 className="modal__header">About Your Reward</h3>
-            <p>You earned a reward of <CreditAmount amount={this.state.rewardAmount} label={false} /> LBRY credits, or <em>LBC</em>.</p>
             <p>This reward will show in your Wallet momentarily, probably while you are reading this message.</p>
             <p>LBC is used to compensate creators, to publish, and to have say in how the network works.</p>
             <p>No need to understand it all just yet! Try watching or downloading something next.</p>
@@ -251,7 +261,7 @@ class CodeRequiredStage extends React.Component {
 }
 
 
-export class AuthOverlay extends React.Component {
+class AuthOverlay extends React.Component {
   constructor(props) {
     super(props);
 
@@ -286,13 +296,10 @@ export class AuthOverlay extends React.Component {
           this.setStage("email", {})
         }
       } else {
-        lbryio.call('reward', 'list', {}).then((userRewards) => {
-          userRewards.filter(function(reward) {
-            return reward.reward_type == rewards.TYPE_NEW_USER && reward.transaction_id;
-          }).length ?
-             this.setStage(null) :
-             this.setStage("welcome")
-        });
+        const {
+          claimedRewardsByType,
+        } = this.props
+        claimedRewardsByType[rewards.TYPE_NEW_USER] ? this.setStage(null) : this.setStage("welcome")
       }
     }).catch((err) => {
       this.setStage("error", { errorText: err.message })
@@ -319,9 +326,11 @@ export class AuthOverlay extends React.Component {
       this.state.stage != "welcome" ?
           <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication">
             <h1>LBRY Early Access</h1>
-            <StageContent {...this.state.stageProps}  setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} />
+            <StageContent {...this.props} {...this.state.stageProps}  setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} />
           </ModalPage> :
-          <StageContent setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} {...this.state.stageProps}  />
+          <StageContent {...this.props} setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} {...this.state.stageProps}  />
     );
   }
 }
+
+export default AuthOverlay
