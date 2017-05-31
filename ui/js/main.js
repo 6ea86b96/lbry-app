@@ -79,15 +79,15 @@ var init = function() {
 
   function onDaemonReady() {
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-    const actions = []
-
-    const dispatch = app.store.dispatch
+    const actions = [],
+          dispatch = app.store.dispatch
 
     dispatch(doDaemonReady())
     dispatch(doChangePath('/discover'))
     dispatch(doFetchDaemonSettings())
     dispatch(doFileList())
-    dispatch(doFetchRewards())
+
+    lbryio.authenticate().then(() => { dispatch(doFetchRewards()) })
 
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }
