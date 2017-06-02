@@ -33,22 +33,35 @@ reducers[types.CLAIM_REWARD_STARTED] = function(state, action) {
   } = action.data
 
   const newRewards = Object.assign({}, state, {
-    claiming: true,
+    claiming: reward.reward_type,
+    errorMessage: undefined,
   })
 
   return Object.assign({}, state, newRewards)
 }
 
 reducers[types.CLAIM_REWARD_COMPLETED] = function(state, action) {
+  return Object.assign({}, state, {
+    claiming: false,
+    errorMessage: undefined,
+  })
+}
+
+reducers[types.CLAIM_REWARD_FAILED] = function(state, action) {
   const {
-    reward,
+    message,
   } = action.data
 
-  const newRewards = Object.assign({}, state, {
+  return Object.assign({}, state, {
     claiming: false,
+    errorMessage: message,
   })
+}
 
-  return Object.assign({}, state, newRewards)
+reducers[types.CLEAR_CLAIM_REWARD_ERROR] = function(state, action) {
+  return Object.assign({}, state, {
+    errorMessage: undefined,
+  })
 }
 
 export default function reducer(state = defaultState, action) {

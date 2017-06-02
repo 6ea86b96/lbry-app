@@ -14,13 +14,13 @@ export const selectRewards = createSelector(
 
 export const selectClaimedRewards = createSelector(
   selectRewards,
-  (rewards) => rewards.filter(reward => reward.transaction_id !== "")
+  (rewards) => rewards.filter(reward => reward.transaction_id)
 )
 
 export const selectClaimedRewardsByType = createSelector(
   selectClaimedRewards,
   (claimedRewards) => {
-    const byType = []
+    const byType = {}
     claimedRewards.forEach(reward => byType[reward.reward_type] = reward)
     return byType
   }
@@ -52,3 +52,13 @@ export const makeSelectRewardByType = () => {
     (reward) => reward
   )
 }
+
+export const selectClaimingReward = createSelector(
+  _selectState,
+  (state) => state.claiming
+)
+
+export const selectErrorMessage = createSelector(
+  _selectState,
+  (state) => state.errorMessage
+)

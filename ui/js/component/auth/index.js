@@ -6,6 +6,7 @@ import {
   selectFetchingRewards,
   selectClaimedRewardsByType,
   makeSelectRewardByType,
+  selectRewardsByType,
 } from 'selectors/rewards'
 import AuthOverlay from './view'
 
@@ -16,6 +17,7 @@ const makeSelect = () => {
     fetchingRewards: selectFetchingRewards(state),
     claimedRewardsByType: selectClaimedRewardsByType(state),
     newUserReward: selectRewardByType(state, { reward_type: 'new_user' }),
+    rewards: selectRewardsByType(state),
   })
 
   return select

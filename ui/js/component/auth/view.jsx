@@ -5,11 +5,10 @@ import Modal from "component/modal";
 import ModalPage from "component/modal-page";
 import Link from "component/link"
 import RewardLink from 'component/rewardLink';
-import {FormRow} from "component/form";
+import {FormRow} from "component/form.js";
 import {CreditAmount, Address} from "component/common";
-import {getLocal, setLocal} from 'utils';
+import {getLocal, setLocal} from 'utils.js';
 import rewards from 'rewards'
-
 
 class SubmitEmailStage extends React.Component {
   constructor(props) {
@@ -140,13 +139,6 @@ class WelcomeStage extends React.Component {
     };
   }
 
-  onRewardClaim(reward) {
-    this.setState({
-      hasReward: true,
-      rewardAmount: reward.amount
-    })
-  }
-
   render() {
     const {
       claimedRewardsByType,
@@ -154,7 +146,7 @@ class WelcomeStage extends React.Component {
       newUserReward,
     } = this.props
 
-    const hasReward = claimedRewardsByType.length > 0
+    const hasReward = claimedRewardsByType[rewards.TYPE_NEW_USER]
 
     if (fetchingRewards) return null
     if (!newUserReward) return null
@@ -169,7 +161,7 @@ class WelcomeStage extends React.Component {
             <p>Below, LBRY is controlled by users -- you -- via blockchain and decentralization.</p>
             <p>Thank you for making content freedom possible! Here's a nickel, kid.</p>
             <div style={{textAlign: "center", marginBottom: "12px"}}>
-              <RewardLink reward={newUserReward} button="primary" onRewardClaim={(event) => { this.onRewardClaim(event) }} onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
+              <RewardLink reward={newUserReward} button="primary" onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
             </div>
           </section>
          </Modal> :
@@ -298,8 +290,9 @@ class AuthOverlay extends React.Component {
       } else {
         const {
           claimedRewardsByType,
+          fetchingRewards,
         } = this.props
-        claimedRewardsByType[rewards.TYPE_NEW_USER] ? this.setStage(null) : this.setStage("welcome")
+        fetchingRewards || claimedRewardsByType[rewards.TYPE_NEW_USER] ? this.setStage(null) : this.setStage("welcome")
       }
     }).catch((err) => {
       this.setStage("error", { errorText: err.message })
@@ -321,6 +314,8 @@ class AuthOverlay extends React.Component {
     if (!StageContent) {
       return <span className="empty">Unknown authentication step.</span>
     }
+
+    if (this.props.fetchingRewards) return null
 
     return (
       this.state.stage != "welcome" ?

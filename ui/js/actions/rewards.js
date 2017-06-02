@@ -27,19 +27,33 @@ export function doClaimReward(reward) {
       data: { reward }
     })
     try {
-      const success = (a) => {
-        console.log(a)
+      const success = (reward) => {
         dispatch({
           type: types.CLAIM_REWARD_COMPLETED,
           data: {
-            a
+            reward
+          }
+        })
+        dispatch(doFetchRewards())
+      }
+      const failure = (error) => {
+        dispatch({
+          type: types.CLAIM_REWARD_FAILED,
+          data: {
+            reward,
+            message: error.message,
           }
         })
       }
-      const failure = (a) => console.error(a)
       rewards.claimReward(reward.reward_type).then(success, failure)
     } catch(err) {
       console.error(err)
     }
+  }
+}
+
+export function doClearErrorMessage() {
+  return {
+    type: types.CLEAR_CLAIM_REWARD_ERROR,
   }
 }
