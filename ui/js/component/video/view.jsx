@@ -114,20 +114,21 @@ class Video extends React.Component {
       loadStatusMessage = __("Downloading stream... not long left now!")
     }
 
-    let klassName = ""
-    if (isLoading || isDownloading) klassName += "video-embedded video"
-    if (mediaType === "video") {
-      klassName += "video-embedded video"
-      klassName += isPlaying ? " video--active" : " video--hidden"
+    let klassName = []
+    if (isLoading || isDownloading) {
+      klassName.push("video-embedded", "video")
+    } else if (mediaType === "video") {
+      klassName.push("video-embedded", "video")
+      klassName.push(isPlaying ? "video--active" : "video--hidden")
     } else if (mediaType === "application") {
-      klassName += "video-embedded"
+      klassName.push("video-embedded")
     } else {
-      if (!isPlaying) klassName += "video-embedded"
+      if (!isPlaying) klassName.push("video-embedded")
     }
     const poster = metadata.thumbnail
 
     return (
-      <div className={klassName}>{
+      <div className={klassName.join(" ")}>{
         isPlaying ?
           (!isReadyToPlay ?
             <span>{__("this is the world's worst loading screen and we shipped our software with it anyway...")} <br /><br />{loadStatusMessage}</span> :
